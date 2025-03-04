@@ -22,32 +22,27 @@ TaskTrack is a web application for managing tasks and monitoring productivity. I
    ```
    git clone https://github.com/yourusername/tasktrack.git
    cd tasktrack
-
    ```
 
 2. Create a virtual environment and activate it:
    ```
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
-
    ```
 
 3. Install the dependencies:
    ```
    pip install -r requirements.txt
-
    ```
 
 4. Run the application:
    ```
    python -m uvicorn app.main:app --reload
-
    ```
 
 5. Open your browser and navigate to:
    ```
    http://localhost:8000
-
    ```
 
 Testing:

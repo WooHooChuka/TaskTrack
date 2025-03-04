@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1>Welcome to TaskTrack</h1>
+        <p>Manage your tasks efficiently and track your productivity</p>
+        <div class="hero-buttons">
+            <a href="/tasks" class="btn btn-primary">View Tasks</a>
+            <a href="/dashboard" class="btn btn-secondary">Go to Dashboard</a>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <h2>Key Features</h2>
+    <div class="feature-cards">
+        <div class="card">
+            <h3>Task Management</h3>
+            <p>Create, edit, and organize your tasks with ease</p>
+        </div>
+        <div class="card">
+            <h3>Interactive Dashboard</h3>
+            <p>Visualize your productivity with dynamic charts</p>
+        </div>
+        <div class="card">
+            <h3>Real-time Updates</h3>
+            <p>See changes instantly without page reloads</p>
+        </div>
+    </div>
+</section>
+
+<section class="recent-tasks">
+    <h2>Recent Tasks</h2>
+    {% if tasks %}
+    <div class="task-list">
+        {% for task in tasks[:5] %}
+        <div class="task-card">
+            <h3>{{ task.title }}</h3>
+            <p class="task-meta">
+                <span class="priority {{ task.priority }}">{{ task.priority }}</span>
+                <span class="status {{ task.status }}">{{ task.status }}</span>
+            </p>
+            <p class="due-date">Due: {{ task.due_date }}</p>
+            <a href="/tasks/{{ task.id }}" class="btn btn-small">View Details</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>No tasks found. <a href="/tasks/create">Create your first task</a>.</p>
+    {% endif %}
+</section>
+{% endblock %} 

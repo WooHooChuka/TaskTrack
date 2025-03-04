@@ -1,9 +1,10 @@
 from fastapi import FastAPI, Request, Depends, Form, HTTPException
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from typing import Optional
+from pydantic import ValidationError
 import uvicorn
 
 from . import models, schemas, crud
@@ -140,7 +141,10 @@ async def get_tasks_api(
     tasks = crud.get_filtered_tasks(db, status=status, priority=priority)
     return tasks
 
-@app.get("/api/dashboard/stats")
+@app.get("/api/dashboard/stats", 
+    summary="Get dashboard statistics",
+    description="Returns task statistics and chart data filtered by time period",
+    response_model=schemas.DashboardStats)
 async def get_dashboard_stats(
     time_period: str = "week",
     db: Session = Depends(get_db)
@@ -194,6 +198,14 @@ async def get_dashboard_stats(
             ]
         }
     }
+
+# Add more specific error handlers
+@app.exception_handler(ValidationError)
+async def validation_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=422,
+        content={"detail": str(exc)}
+    )
 
 if __name__ == "__main__":
     uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True) 

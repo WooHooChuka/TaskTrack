@@ -224,12 +224,12 @@ async def validation_exception_handler(request, exc):
 async def http_exception_handler(request, exc):
     if exc.status_code == 404:
         return templates.TemplateResponse(
-            "404.html",
+            "errors/404.html",
             {"request": request, "detail": exc.detail},
             status_code=404
         )
     return templates.TemplateResponse(
-        "error.html",
+        "errors/error.html",
         {"request": request, "detail": exc.detail},
         status_code=exc.status_code
     )
@@ -237,7 +237,7 @@ async def http_exception_handler(request, exc):
 @app.exception_handler(Exception)
 async def general_exception_handler(request, exc):
     return templates.TemplateResponse(
-        "error.html",
+        "errors/error.html",
         {"request": request, "detail": "Internal Server Error"},
         status_code=500
     )

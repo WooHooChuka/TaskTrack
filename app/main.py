@@ -119,6 +119,10 @@ async def edit_task(
     assignee: str = Form(...),
     db: Session = Depends(get_db)
 ):
+    task = crud.get_task(db, task_id)
+    if task is None:
+        raise HTTPException(status_code=404, detail="Task not found")
+    
     task_data = schemas.TaskUpdate(
         title=title,
         description=description,
@@ -127,16 +131,16 @@ async def edit_task(
         status=status,
         assignee=assignee
     )
-    task = crud.update_task(db, task_id, task_data)
-    if task is None:
-        raise HTTPException(status_code=404, detail="Task not found")
-    return RedirectResponse(url=f"/tasks/{task_id}", status_code=303)
+    crud.update_task(db, task_id, task_data)
+    return RedirectResponse(url="/tasks", status_code=303)
 
 @app.post("/tasks/{task_id}/delete")
 async def delete_task(task_id: int, db: Session = Depends(get_db)):
-    success = crud.delete_task(db, task_id)
-    if not success:
+    task = crud.get_task(db, task_id)
+    if task is None:
         raise HTTPException(status_code=404, detail="Task not found")
+    
+    crud.delete_task(db, task_id)
     return RedirectResponse(url="/tasks", status_code=303)
 
 # API endpoints for AJAX requests
@@ -213,6 +217,29 @@ async def validation_exception_handler(request, exc):
     return JSONResponse(
         status_code=422,
         content={"detail": str(exc)}
+    )
+
+# Add global exception handlers
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request, exc):
+    if exc.status_code == 404:
+        return templates.TemplateResponse(
+            "404.html",
+            {"request": request, "detail": exc.detail},
+            status_code=404
+        )
+    return templates.TemplateResponse(
+        "error.html",
+        {"request": request, "detail": exc.detail},
+        status_code=exc.status_code
+    )
+
+@app.exception_handler(Exception)
+async def general_exception_handler(request, exc):
+    return templates.TemplateResponse(
+        "error.html",
+        {"request": request, "detail": "Internal Server Error"},
+        status_code=500
     )
 
 if __name__ == "__main__":

@@ -40,7 +40,7 @@ def create_task(db: Session, task: schemas.TaskCreate):
     return db_task
 
 def update_task(db: Session, task_id: int, task: schemas.TaskUpdate):
-    db_task = db.query(models.Task).filter(models.Task.id == task_id).first()
+    db_task = get_task(db, task_id)
     if db_task is None:
         return None
     
@@ -52,7 +52,7 @@ def update_task(db: Session, task_id: int, task: schemas.TaskUpdate):
     return db_task
 
 def delete_task(db: Session, task_id: int):
-    db_task = db.query(models.Task).filter(models.Task.id == task_id).first()
+    db_task = get_task(db, task_id)
     if db_task is None:
         return False
     

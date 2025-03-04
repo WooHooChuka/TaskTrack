@@ -4,6 +4,15 @@ document.addEventListener('DOMContentLoaded', function() {
   const priorityFilter = document.getElementById('priority-filter');
   const applyFiltersBtn = document.getElementById('apply-filters');
   
+  // Set initial filter values from URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('status')) {
+    statusFilter.value = urlParams.get('status');
+  }
+  if (urlParams.has('priority')) {
+    priorityFilter.value = urlParams.get('priority');
+  }
+  
   applyFiltersBtn.addEventListener('click', function() {
     const status = statusFilter.value;
     const priority = priorityFilter.value;

@@ -16,22 +16,22 @@
         <div class="filter-group">
             <label for="status-filter">Status:</label>
             <select id="status-filter">
-                <option value="">All</option>
-                <option value="new">New</option>
-                <option value="in_progress">In Progress</option>
-                <option value="completed">Completed</option>
+                <option value="" {% if not status %}selected{% endif %}>All</option>
+                <option value="new" {% if status == 'new' %}selected{% endif %}>New</option>
+                <option value="in_progress" {% if status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                <option value="completed" {% if status == 'completed' %}selected{% endif %}>Completed</option>
             </select>
         </div>
         <div class="filter-group">
             <label for="priority-filter">Priority:</label>
             <select id="priority-filter">
-                <option value="">All</option>
-                <option value="high">High</option>
-                <option value="medium">Medium</option>
-                <option value="low">Low</option>
+                <option value="" {% if not priority %}selected{% endif %}>All</option>
+                <option value="high" {% if priority == 'high' %}selected{% endif %}>High</option>
+                <option value="medium" {% if priority == 'medium' %}selected{% endif %}>Medium</option>
+                <option value="low" {% if priority == 'low' %}selected{% endif %}>Low</option>
             </select>
         </div>
-        <button id="apply-filters" class="btn btn-secondary">Apply Filters</button>
+        <button id="apply-filters" class="btn btn-primary">Apply Filters</button>
     </div>
 </section>
 

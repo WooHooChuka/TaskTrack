@@ -61,7 +61,15 @@ async def tasks_page(
     db: Session = Depends(get_db)
 ):
     tasks = crud.get_filtered_tasks(db, status=status, priority=priority)
-    return templates.TemplateResponse("tasks.html", {"request": request, "tasks": tasks})
+    return templates.TemplateResponse(
+        "tasks.html", 
+        {
+            "request": request, 
+            "tasks": tasks,
+            "status": status,
+            "priority": priority
+        }
+    )
 
 @app.get("/tasks/create", response_class=HTMLResponse)
 async def create_task_form(request: Request):

@@ -23,6 +23,10 @@ class Task(TaskBase):
     class Config:
         orm_mode = True
 
+class TaskFilter(BaseModel):
+    status: Optional[str] = None  # 'new', 'in_progress', 'completed'
+    priority: Optional[str] = None  # 'high', 'medium', 'low'
+
 class ChartData(BaseModel):
     labels: List[str]
     datasets: List[Dict[str, Any]]

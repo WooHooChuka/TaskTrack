@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List, Dict, Any
 from datetime import datetime
 
 class TaskBase(BaseModel):
@@ -21,4 +21,18 @@ class Task(TaskBase):
     status: str
 
     class Config:
-        orm_mode = True 
+        orm_mode = True
+
+class ChartData(BaseModel):
+    labels: List[str]
+    datasets: List[Dict[str, Any]]
+
+class DashboardSummary(BaseModel):
+    total: int
+    completed: int
+    in_progress: int
+    new: int
+
+class DashboardStats(BaseModel):
+    summary: DashboardSummary
+    chart_data: ChartData 

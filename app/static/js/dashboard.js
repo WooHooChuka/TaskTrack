@@ -109,4 +109,42 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Error fetching dashboard data:', error);
       });
   });
+
+  // Add notification functionality
+  function showNotification(message) {
+    if (!("Notification" in window)) {
+      console.log("This browser does not support notifications");
+      return;
+    }
+    
+    if (Notification.permission === "granted") {
+      new Notification(message);
+    } else if (Notification.permission !== "denied") {
+      Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+          new Notification(message);
+        }
+      });
+    }
+  }
+
+  function checkDueDates() {
+    const tasks = document.querySelectorAll('.task-card');
+    tasks.forEach(task => {
+      const dueDate = new Date(task.dataset.dueDate);
+      if (dueDate - new Date() < 86400000) { // 24 hours
+        showNotification(`Task "${task.dataset.title}" is due soon!`);
+      }
+    });
+  }
+
+  // Request notification permission when page loads
+  if ("Notification" in window) {
+    Notification.requestPermission();
+  }
+
+  // Check due dates periodically (every hour)
+  setInterval(checkDueDates, 3600000);
+  // Initial check
+  checkDueDates();
 }); 
